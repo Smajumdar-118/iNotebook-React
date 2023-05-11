@@ -13,9 +13,10 @@ router.post('/CreateUser', [
     body('name', 'Name should be minimum 3 character').isLength({ min: 3 }),
     body('password', 'Password should be minimum 5 character').isLength({ min: 5 })
 ], async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({success, errors: errors.array() });
     }
 
     try {
@@ -23,7 +24,7 @@ router.post('/CreateUser', [
 
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ error: "Sorry a user with this email already exists" })
+            return res.status(400).json({success, error: "Sorry a user with this email already exists" })
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -39,7 +40,8 @@ router.post('/CreateUser', [
         }
         const authToken = jwt.sign(data, SECRET_KEY)
         // res.json(user)
-        res.json({ authToken });
+        success =true
+        res.json({success, authToken });
     }
     catch (error) {
         console.message(error.message);
@@ -55,24 +57,26 @@ router.post('/login', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password should not be empty').exists()
 ], async (req, res) => {
-
+    let success = false;
 
     const { email, password } = req.body
     try {
         let user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ error: "Please enter a valis credentials" })
+            success = false;
+            return res.status(400).json({success, error: "Please enter a valis credentials" })
         }
         const passwordCompare = await bcrypt.compare(password, user.password)
         if (!passwordCompare) {
-            return res.status(400).json({ error: "Please enter a valis credentials" })
+            success = false;
+            return res.status(400).json({success, error: "Please enter a valis credentials" })
         }
         const data = {
             user: { id: user.id }
         }
         const authToken = jwt.sign(data, SECRET_KEY)
-
-        res.json({ authToken });
+        success=true;
+        res.json({success, authToken });
 
     } catch (error) {
         console.message(error.message);

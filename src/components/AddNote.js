@@ -5,11 +5,12 @@ import noteContext from '../context/notes/NoteContext';
 function AddNote() {
     const Context = useContext(noteContext);
     const {addNote} = Context;
-    const [note , setNote] = useState({title : '' , description : '' ,tag : 'default'});
+    const [note , setNote] = useState({title : '' , description : '' ,tag : ''});
 
     const handleClick = (e) =>{
       e.preventDefault();
         addNote(note.title , note.description ,note.tag);
+        setNote({title : '' , description : '' ,tag : ''})
     }
 
     const onChange = (e)=>{
@@ -25,18 +26,20 @@ function AddNote() {
       <form>
   <div className="form-group">
     <label htmlFor="title">Title</label>
-    <input type="text" className="form-control" id="title" name="title" aria-describedby="emailHelp" onChange={onChange}/>
-    
+    <input type="text" className="form-control" id="title" name="title" value={note.title} aria-describedby="emailHelp" onChange={onChange}/>
+    {note.title.length<4 && <small id="emailHelp" className="form-text text-muted">Title Should be minimum 4 Character</small>}
   </div>
   <div className="form-group">
     <label htmlFor="description">Description</label>
-    <input type="text" className="form-control" id="description" name="description" onChange={onChange}/>
+    <input type="text" className="form-control" id="description" name="description" value={note.description} onChange={onChange}/>
+    {note.description.length<5 && <small id="emailHelp" className="form-text text-muted">Description Should be minimum 5 Character</small>}
   </div>
-  {/* <div className="form-group form-check">
-    <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
-    <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
-  </div> */}
-  <button type="submit" className="btn btn-primary" onClick={handleClick}>Submit</button>
+  <div className="form-group">
+    <label htmlFor="tag">Tag</label>
+    <input type="text" className="form-control" id="tag" name="tag" value={note.tag} onChange={onChange}/>
+  </div>
+ 
+  <button disabled={note.title.length<4 || note.description.length<5} type="submit" className="btn btn-primary" onClick={handleClick}>Submit</button>
 </form>
     </div>
   )
