@@ -3,14 +3,14 @@ import React from 'react';
 
 
 import Note from './Note';
-function Home() {
- 
+function Home(props) {
+ const {showAlert} = props
   return (
     
    
       <div>
 
-      <Note/>
+      <Note showAlert={showAlert}/>
       </div>
       
    

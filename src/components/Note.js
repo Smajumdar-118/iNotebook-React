@@ -5,7 +5,7 @@ import noteContext from '../context/notes/NoteContext';
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
 
-function Note() {
+function Note(props) {
   const Context = useContext(noteContext);
   const {note,getNotes,editNote} = Context;
   useEffect(()=>{
@@ -33,7 +33,7 @@ function Note() {
 
   return (
     <>
-    <AddNote/>
+    <AddNote showAlert={props.showAlert}/>
 
 <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
   Launch demo modal
@@ -80,7 +80,7 @@ function Note() {
         <div className="row my-3">
 
         {note.map((notes)=>{
-          return <Noteitem note= {notes} updateNote={updateNote}/>
+          return <Noteitem note= {notes} updateNote={updateNote} showAlert={props.showAlert}/>
         })}
         </div>
       </div>
