@@ -52,40 +52,51 @@ router.post('/CreateUser', [
 
 
 
-
 router.post('/login', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password should not be empty').exists()
 ], async (req, res) => {
     let success = false;
 
-    const { email, password } = req.body
+    // --- FIX 1: ADD VALIDATION CHECK ---
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ success, errors: errors.array() });
+    }
+    // ------------------------------------
+
+    const { email, password } = req.body;
+
     try {
         let user = await User.findOne({ email });
+
         if (!user) {
-            success = false;
-            return res.status(400).json({success, error: "Please enter a valis credentials" })
+            // Corrected typo
+            return res.status(400).json({ success, error: "Please enter a valid credentials" })
         }
-        const passwordCompare = await bcrypt.compare(password, user.password)
+
+        const passwordCompare = await bcrypt.compare(password, user.password);
+
         if (!passwordCompare) {
-            success = false;
-            return res.status(400).json({success, error: "Please enter a valis credentials" })
+            // Corrected typo
+            return res.status(400).json({ success, error: "Please enter a valid credentials" })
         }
+
         const data = {
             user: { id: user.id }
         }
+        
         const authToken = jwt.sign(data, SECRET_KEY)
-        success=true;
-        res.json({success, authToken });
+        success = true;
+        res.json({ success, authToken });
 
     } catch (error) {
-        console.message(error.message);
-        res.status(500).send("Some Error Occured");
+        // Corrected typo: console.message -> console.error or console.log
+        console.error(error.message); 
+        res.status(500).send("Internal Server Error"); // Changed generic text
     }
 
-})
-
-
+});
 
 
 

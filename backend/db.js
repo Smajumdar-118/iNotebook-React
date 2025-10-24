@@ -1,12 +1,18 @@
 const mongoose = require('mongoose');
-const express = require('express');
 
-// const mongoURI = "mongodb://localhost:27017/iNotebook"
-// const mongoURI = "mongodb://127.0.0.1:27017/iNotebook"
-const mongoURI = "mongodb+srv://Smajumdar_118:Sayan4444@mydb.xpjoxqo.mongodb.net/"
+// 1. ADD YOUR DATABASE NAME HERE
+// (I'm using 'iNotebook' as an example, but use the correct name from Atlas)
+const mongoURI = "mongodb+srv://Smajumdar_118:Sayan4444@mydb.xpjoxqo.mongodb.net/test"; 
 
-const connectToMongo =()=>{
-    mongoose.connect(mongoURI);
-    
-}
+const connectToMongo = async () => {
+    try {
+        await mongoose.connect(mongoURI);
+        console.log("MongoDB Connection Successful!");
+    } catch (error) {
+        console.error("MongoDB Connection Failed:", error);
+        // Exit the process if the database connection fails critically
+        process.exit(1); 
+    }
+};
+
 module.exports = connectToMongo;
