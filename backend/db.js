@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-// 1. ADD YOUR DATABASE NAME HERE
-// (I'm using 'iNotebook' as an example, but use the correct name from Atlas)
 const mongoURI = "mongodb+srv://Smajumdar_118:Sayan4444@mydb.xpjoxqo.mongodb.net/test"; 
 
 const connectToMongo = async () => {
