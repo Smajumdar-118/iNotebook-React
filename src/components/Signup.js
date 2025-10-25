@@ -8,7 +8,7 @@ function Signup(props) {
   const handleSubmit = async(e) =>{
     e.preventDefault();
     const {name,email,password} = credential;
-    const response = await fetch(`http://127.0.0.1:5000/api/auth/CreateUser`, {
+    const response = await fetch(`/api/auth/CreateUser`, {
         method: "POST", 
         
         headers: {
